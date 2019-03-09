@@ -1,0 +1,26 @@
+{
+  "name": "jason-stillerman",
+  "version": "1.0.0",
+  "description": "Aerial by HTML5 UP\r html5up.net | @ajlkn\r Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stillerman/stillerman.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stillerman/stillerman.github.io/issues"
+  },
+  "homepage": "https://github.com/Stillerman/stillerman.github.io#readme",
+  "dependencies": {
+    "@shopify/draggable": "^1.0.0-beta.8",
+    "font-awesome.min.css": "^3.2.1",
+    "tippy.js": "^4.0.4",
+    "typed.js": "^2.0.10"
+  }
+}
