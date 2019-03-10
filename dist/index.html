@@ -7,21 +7,21 @@
 	<link rel="stylesheet" href="/translucent.49a04fd3.css">
 	<style media="screen">.terminal {
 			color: white;
-			background-color: black;
-			opacity: 0.8;
+			background-color: rgb(0, 0, 0, 0.8);
 			font-family: "Consolas", "Courier New", "Courier";
 			position: absolute;
 			width: 30%;
 			height: 50%;
 			border-radius: 10px;
 			z-index: 1;
+			box-shadow: rgba(63, 63, 63, 0.4) 0px 2px 5px;
 		}
 		.text-body{
 			padding: 5px;
 		}
 		.top-bar {
 			color: black;
-			background-color: #f8f8f8;
+			background-color: rgba(248, 248, 248, 1);
 			border-radius: 10px 10px 0px 0px;
 			text-align: center;
 			font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -49,8 +49,7 @@
 			left: 0;
 			right: 0;
 			border-radius: 5px 5px 0px 0px;
-			opacity: 0.8;
-			background-color: #808080;
+			background-color: rgb(200, 200, 200);
 			padding: 5px;
 			
 			width: 25%;
@@ -68,6 +67,7 @@
 			text-align: center;
 			font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 			font-size: 0.8em;
+			text-shadow: black 0px 3px 15px;
 		}
 
 		.desktop-icon {
@@ -75,10 +75,30 @@
 			height: 75px;
 			background-size: 75px;
 			background-image: url('text.e8ab0e72.png');
+		}
+
+		.osxinfobar {
+			position: fixed;
+			padding-top: 3px;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 3.5%;
+			background-color: #D1D6E5;
+			opacity: 0.9;
+			font-weight: 600;
+			font-size: 0.9em;
+			color: black;
+			font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+			padding-left: 5%;
+			box-shadow: rgba(63, 63, 63, 0.4) 0px 2px 5px;
 		}</style>
 <script src="/bg-gradient.57cb658b.js"></script><script src="/translucent.49a04fd3.js"></script></head>
 <body>
 	<div id="os">
+		<div class="osxinfobar">
+			Jason Stillerman
+		</div>
 		<div class="terminal window">
 			<div class="top-bar">Terminal — bash — 80x25</div>
 			<div class="text-body">
