@@ -4,7 +4,7 @@ import dragElement from './drag'
 
 var typed = new Typed('.typed', {
   // Waits 1000ms after typing "First"
-  strings: ['mkdir website', 'cd website', 'touch index.html', 'touch index.js'],
+  strings: ['Work in progress...', 'Come back soon.']
   loop: true,
   typeSpeed: 25,
   backDelay: 1000,
