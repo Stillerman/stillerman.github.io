@@ -5843,7 +5843,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var typed = new _typed.default('.typed', {
   // Waits 1000ms after typing "First"
-  strings: ['mkdir website', 'cd website', 'touch index.html', 'touch index.js'],
+  strings: ['Work in progress...', 'Come back soon.'],
   loop: true,
   typeSpeed: 25,
   backDelay: 1000,
@@ -5899,7 +5899,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65509" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57213" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
