@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueParticles from 'vue-particles'
+import VueTypedJs from 'vue-typed-js'
+
+Vue.use(VueTypedJs)
 Vue.use(VueParticles)
 
 Vue.config.productionTip = false
