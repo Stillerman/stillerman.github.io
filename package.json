@@ -1,26 +1,31 @@
 {
-  "name": "jason-stillerman",
-  "version": "1.0.0",
-  "description": "Aerial by HTML5 UP\r html5up.net | @ajlkn\r Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "./node_modules/.bin/parcel src/index.html"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Stillerman/stillerman.github.io.git"
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {},
+      "tailwindcss": {}
+    }
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Stillerman/stillerman.github.io/issues"
-  },
-  "homepage": "https://github.com/Stillerman/stillerman.github.io#readme",
+  "name": "stillerman.github.io",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Stillerman/stillerman.github.io",
+  "author": "Jason Stillerman <jason.t.stillerman@gmail.com>",
+  "license": "MIT",
   "dependencies": {
-    "@shopify/draggable": "^1.0.0-beta.8",
-    "font-awesome.min.css": "^3.2.1",
-    "tippy.js": "^4.0.4",
-    "typed.js": "^2.0.10"
+    "nodemon": "^1.19.1",
+    "parcel-bundler": "^1.12.3",
+    "particlesjs": "^2.2.3",
+    "tailwindcss": "^1.1.2",
+    "vue": "^2.6.10",
+    "vue-hot-reload-api": "^2.3.3",
+    "vue-particles": "^1.0.9"
+  },
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^3.0.0",
+    "pug": "^2.0.4",
+    "vue-template-compiler": "^2.6.10"
   }
 }
