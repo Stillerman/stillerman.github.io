@@ -30,8 +30,8 @@
 }
 
 body{
-  width: var(--page-width);
-  height: var(--page-height);
+  /* width: var(--page-width);
+  height: var(--page-height); */
   margin: 0;
   font-family: "Open Sans", sans-serif;
   font-weight: 300;
@@ -51,7 +51,8 @@ li{
 
 #main{
   float: left;
-  width: var(--main-width);
+  width: 80%;
+  /* width: var(--main-width); */
   padding: 0.25in 0.25in 0 0.25in;
   font-size: 7pt;
 }
@@ -59,7 +60,7 @@ li{
 #sidebar{
   float: right;
   position: relative; /* for disclaimer */
-  width: var(--sidebar-width);
+  width: 20%;
   height: 100%;
   padding: 0.6in var(--sidebar-horizontal-padding);
   background-color: #f2f2f2;

@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "./node_modules/.bin/parcel build src/index.html",
-    "dev": "./node_modules/.bin/parcel src/index.html"
+    "dev": "./node_modules/.bin/parcel serve src/index.html"
   },
   "postcss": {
     "plugins": {
