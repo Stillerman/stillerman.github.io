@@ -1,22 +1,24 @@
 <template lang="pug">
 .app
   vue-particles.particles(color="#dedede" :particleOpacity="0.4" :lineOpacity="0.2")
-  .flex.justify-center.items-center.h-full.me
-    img(src="./assets/jason.png" class="w-1/3 h-1/3" :style="offsetStyle").rounded-full.shadow-lg
+  .flex.justify-center
+    p.text-3xl.font.mt-5.text-white Jason Stillerman
+  .flex.justify-center
+    p.text-white.bold.text Frontend / Backend Developer
+  .flex.justify-center.items-center.me.fixed
+    img(src="./assets/jason.png" class="w-3/5" :style="offsetStyle").rounded-full.shadow-lg
   .h-screen.aqua
     .flex.justify-center.sexy
-      
-      vue-typed-js(
-        :strings="['Reactive.', 'Brilliant.', 'Sexy.', 'Responsive.', 'Cheap.', 'Quickly Delivered.']"
-        :loop="true"
-        :typeSpeed="70"        :smartBackspace="true"
-        :backSpeed="50"
-        :startDelay="500"
-        :backDelay="1000")
-        p.text-4xl.text-gray-200.m-5
-          | My Websites are 
-          span.typing
-        
+        vue-typed-js(
+          :strings="['Reactive.', 'Cheap.', 'Modern.', 'Sleek.', 'Sexy.', 'Responsive.', 'Quickly Delivered.']"
+          :loop="true"
+          :typeSpeed="70"        :smartBackspace="true"
+          :backSpeed="50"
+          :startDelay="500"
+          :backDelay="1000")
+          p.text-4xl.text-gray-200.m-5
+            | My Websites are 
+            span.typing
 
 </template>
 
@@ -46,6 +48,8 @@ export default {
 </script>
 
 <style lang="postcss">
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -56,6 +60,10 @@ export default {
 
 .me {
   z-index: 9999;
+}
+
+.font {
+  font-family: 'Montserrat', sans-serif;
 }
 
 .sexy {
