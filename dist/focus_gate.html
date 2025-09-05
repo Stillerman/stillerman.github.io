@@ -619,6 +619,11 @@
             justify-content: center;
         }
 
+        .email-form p {
+            margin: 0;
+            display: flex;
+        }
+
         .email-input {
             flex: 1;
             min-width: 250px;
@@ -886,13 +891,13 @@
             <h2>Ready to Reclaim Your Attention?</h2>
             <p>Join the waitlist for early access. Limited beta spots available.</p>
             
-            <form name="waitlist" method="POST" class="email-form" id="waitlist-form" data-netlify="true" data-netlify-honeypot="bot-field">
-                <input type="hidden" name="form-name" value="waitlist" />
-                <p style="display: none;">
-                    <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+            <form name="waitlist" class="email-form" id="waitlist-form" netlify>
+                <p>
+                    <input type="email" name="email" class="email-input" placeholder="Enter your email" required>
                 </p>
-                <input type="email" name="email" class="email-input" placeholder="Enter your email" required>
-                <button type="submit" class="submit-btn">Join Waitlist</button>
+                <p>
+                    <button type="submit" class="submit-btn">Join Waitlist</button>
+                </p>
             </form>
         </div>
     </section>
@@ -940,7 +945,7 @@
             }
             
             // Update button state during submission
-            submitBtn.textContent = 'Joining...';
+            submitBtn.textContent = 'Joined!';
             submitBtn.disabled = true;
             
             // Let Netlify handle the form submission naturally
