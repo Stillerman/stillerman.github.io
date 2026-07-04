@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - Dispersion Demo</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body { margin: 0; }
+			#info {
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				color: white;
+				font-family: sans-serif;
+				text-shadow: 1px 1px 2px black;
+			}
+			#info a { color: #8df; }
+		</style>
+	</head>
+
+	<body>
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+					"three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+				}
+			}
+		</script>
+
+		<script type="module">
+
+			import * as THREE from 'three';
+
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+			let camera, scene, renderer;
+
+			init().then( render );
+
+			async function init() {
+
+				const container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.01, 50 );
+				camera.position.set( 3, 2, 4 );
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.toneMapping = THREE.NeutralToneMapping;
+				renderer.toneMappingExposure = 1;
+				container.appendChild( renderer.domElement );
+
+				const environment = new RoomEnvironment();
+				const pmremGenerator = new THREE.PMREMGenerator( renderer );
+
+				scene = new THREE.Scene();
+				scene.backgroundBlurriness = 0.5;
+
+				const env = pmremGenerator.fromScene( environment ).texture;
+				scene.background = env;
+				scene.environment = env;
+				environment.dispose();
+
+				// Create a glass-like material with dispersion effect
+				const glassMaterial = new THREE.MeshPhysicalMaterial({
+					color: 0xffffff,
+					metalness: 0,
+					roughness: 0,
+					transmission: 1,
+					thickness: 1.5,
+					ior: 1.5,
+					dispersion: 0.5,
+				});
+
+				// Create several geometric shapes
+				const icosahedron = new THREE.Mesh(
+					new THREE.IcosahedronGeometry( 0.5, 0 ),
+					glassMaterial
+				);
+				icosahedron.position.set( -1.2, 0, 0 );
+				scene.add( icosahedron );
+
+				const torus = new THREE.Mesh(
+					new THREE.TorusGeometry( 0.4, 0.15, 32, 64 ),
+					glassMaterial
+				);
+				torus.position.set( 1.2, 0, 0 );
+				scene.add( torus );
+
+				const sphere = new THREE.Mesh(
+					new THREE.SphereGeometry( 0.5, 64, 32 ),
+					glassMaterial
+				);
+				sphere.position.set( 0, 0, 0 );
+				scene.add( sphere );
+
+				const controls = new OrbitControls( camera, renderer.domElement );
+				controls.addEventListener( 'change', render );
+				controls.minDistance = 1;
+				controls.maxDistance = 20;
+				controls.target.set( 0, 0, 0 );
+				controls.update();
+
+				window.addEventListener( 'resize', onWindowResize );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				render();
+
+			}
+
+			function render() {
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>

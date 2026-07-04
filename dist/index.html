@@ -1,133 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>three.js webgl - Dispersion Demo</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			body { margin: 0; }
-			#info {
-				position: absolute;
-				top: 10px;
-				width: 100%;
-				text-align: center;
-				color: white;
-				font-family: sans-serif;
-				text-shadow: 1px 1px 2px black;
-			}
-			#info a { color: #8df; }
-		</style>
-	</head>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jason Stillerman</title>
+<meta name="description" content="Jason Stillerman — AI engineer at BETA Technologies.">
+<style>
+  :root {
+    --bg: #050505;
+    --text: #8b8b8f;
+    --bright: #f4f4f5;
+    --accent: #f4f4f5;
+    --glow: rgba(255,255,255,0);
+  }
 
-	<body>
-		<script type="importmap">
-			{
-				"imports": {
-					"three": "https://unpkg.com/three@0.170.0/build/three.module.js",
-					"three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
-				}
-			}
-		</script>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-		<script type="module">
+  html, body { height: 100%; }
 
-			import * as THREE from 'three';
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    letter-spacing: -0.011em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8vh 7vw;
+    overflow-x: hidden;
+    transition: color 0.9s ease;
+  }
 
-			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-			import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+  /* ---- Full-screen mood overlays (fade in on hover) ---- */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.1s ease;
+    will-change: opacity;
+  }
+  .overlay.on { opacity: 1; }
 
-			let camera, scene, renderer;
+  #sky   { background: radial-gradient(120% 90% at 80% -10%, #ffb877 0%, #ff7e6b 22%, #7b6fd6 55%, #1a1740 100%); }
+  #ocean { background: radial-gradient(130% 100% at 20% 120%, #0affc2 0%, #0a94d6 30%, #063a6b 65%, #021024 100%); }
+  #night { background: radial-gradient(120% 120% at 50% 120%, #2b2f6b 0%, #14163a 45%, #05060f 100%); }
+  #warm  { background: radial-gradient(120% 100% at 50% 0%, #ffd27a 0%, #f7a55c 30%, #7a4a3a 65%, #1a0f0c 100%); }
+  #home  { background: radial-gradient(120% 100% at 50% 40%, #6ee7b7 0%, #2f9e77 35%, #1a4a3c 70%, #05130e 100%); }
 
-			init().then( render );
+  /* starfield for the van */
+  #night .star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle { 0%,100% { opacity: .15; } 50% { opacity: .9; } }
 
-			async function init() {
+  main {
+    position: relative;
+    z-index: 2;
+    max-width: 34rem;
+    font-size: clamp(1.15rem, 1rem + 1.1vw, 1.6rem);
+    line-height: 1.72;
+    transition: transform 0.9s cubic-bezier(.22,1,.36,1), filter 0.9s ease;
+    will-change: transform;
+  }
 
-				const container = document.createElement( 'div' );
-				document.body.appendChild( container );
+  .hi {
+    display: block;
+    color: var(--bright);
+    font-weight: 400;
+    margin-bottom: 1.35em;
+    font-size: 1.08em;
+    transition: color 0.9s ease;
+  }
 
-				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.01, 50 );
-				camera.position.set( 3, 2, 4 );
+  p { margin-bottom: 1.35em; }
+  p:last-child { margin-bottom: 0; }
 
-				renderer = new THREE.WebGLRenderer( { antialias: true } );
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				renderer.toneMapping = THREE.NeutralToneMapping;
-				renderer.toneMappingExposure = 1;
-				container.appendChild( renderer.domElement );
+  /* ---- Magic links ---- */
+  a.m {
+    color: var(--bright);
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .5s ease, text-shadow .5s ease;
+  }
+  a.m::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 100%;
+    bottom: -0.06em;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+    transition: right .45s cubic-bezier(.22,1,.36,1);
+  }
+  a.m:hover { color: var(--word, #fff); text-shadow: 0 0 22px var(--word, rgba(255,255,255,.6)); }
+  a.m:hover::after { right: 0; background: var(--word, #fff); opacity: .9; }
 
-				const environment = new RoomEnvironment();
-				const pmremGenerator = new THREE.PMREMGenerator( renderer );
+  /* subtle accent (non-link mentions) */
+  .k { color: #cfcfd4; font-weight: 400; }
 
-				scene = new THREE.Scene();
-				scene.backgroundBlurriness = 0.5;
+  .foot {
+    display: block;
+    margin-top: 2.4em;
+    font-size: 0.72em;
+    letter-spacing: 0.02em;
+    color: #47474c;
+    transition: color 0.9s ease;
+  }
+  .foot a { color: inherit; text-decoration: none; border-bottom: 1px solid #333; }
+  .foot a:hover { color: #cfcfd4; }
 
-				const env = pmremGenerator.fromScene( environment ).texture;
-				scene.background = env;
-				scene.environment = env;
-				environment.dispose();
+  /* ---- particle & vehicle layer ---- */
+  #fx { position: fixed; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+  .particle {
+    position: absolute;
+    font-size: 1.3rem;
+    will-change: transform, opacity;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,.4));
+  }
+  .vehicle {
+    position: fixed;
+    z-index: 3;
+    font-size: 2.4rem;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,.35));
+    will-change: transform;
+  }
 
-				// Create a glass-like material with dispersion effect
-				const glassMaterial = new THREE.MeshPhysicalMaterial({
-					color: 0xffffff,
-					metalness: 0,
-					roughness: 0,
-					transmission: 1,
-					thickness: 1.5,
-					ior: 1.5,
-					dispersion: 0.5,
-				});
+  /* body mood tweaks */
+  body.lift main { transform: translateY(-10px) scale(1.006); }
+  body.hug  main { animation: hug .7s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes hug { 0%{transform:scale(1)} 35%{transform:scale(.965)} 70%{transform:scale(1.015)} 100%{transform:scale(1)} }
+  body.dive main { transform: translateY(6px); filter: saturate(1.15); }
+  body.themed .foot { color: rgba(255,255,255,.55); }
+  body.themed .hi   { color: #fff; }
 
-				// Create several geometric shapes
-				const icosahedron = new THREE.Mesh(
-					new THREE.IcosahedronGeometry( 0.5, 0 ),
-					glassMaterial
-				);
-				icosahedron.position.set( -1.2, 0, 0 );
-				scene.add( icosahedron );
+  @media (prefers-reduced-motion: reduce) {
+    *, main { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
 
-				const torus = new THREE.Mesh(
-					new THREE.TorusGeometry( 0.4, 0.15, 32, 64 ),
-					glassMaterial
-				);
-				torus.position.set( 1.2, 0, 0 );
-				scene.add( torus );
+  <div id="sky"   class="overlay"></div>
+  <div id="ocean" class="overlay"></div>
+  <div id="night" class="overlay"></div>
+  <div id="warm"  class="overlay"></div>
+  <div id="home"  class="overlay"></div>
 
-				const sphere = new THREE.Mesh(
-					new THREE.SphereGeometry( 0.5, 64, 32 ),
-					glassMaterial
-				);
-				sphere.position.set( 0, 0, 0 );
-				scene.add( sphere );
+  <div id="fx"></div>
 
-				const controls = new OrbitControls( camera, renderer.domElement );
-				controls.addEventListener( 'change', render );
-				controls.minDistance = 1;
-				controls.maxDistance = 20;
-				controls.target.set( 0, 0, 0 );
-				controls.update();
+  <main>
+    <span class="hi">Hi, I'm Jason.</span>
 
-				window.addEventListener( 'resize', onWindowResize );
+    <p>I'm an AI engineer at <a class="m" href="https://www.beta.team" target="_blank" rel="noopener"
+        data-theme="sky" data-mood="lift" data-word="#8fd3ff" data-emoji="✈️" data-vehicle="🛩️">BETA Technologies</a>
+        — we build eVTOL airplanes. I tinker with agents all day and try to make flying electric taxis real, faster.</p>
 
-			}
+    <p>Previously I did pretraining research at <a class="m" href="https://huggingface.co" target="_blank" rel="noopener"
+        data-theme="warm" data-mood="hug" data-word="#ffd45e" data-emoji="🤗">Hugging&nbsp;Face</a>,
+        where I helped train
+        <a class="m" href="https://arxiv.org/abs/2305.06161r" target="_blank" rel="noopener" data-theme="warm" data-word="#ffd45e" data-emoji="⭐">StarCoder</a>
+        and <a class="m" href="https://huggingface.co/blog/smollm3" target="_blank" rel="noopener" data-theme="warm" data-word="#ffd45e" data-emoji="🤏">SmolLM</a>,
+        and built <a class="m" href="https://www.linkedin.com/posts/jason-stillerman-3a0069195_can-you-beat-an-llm-in-a-race-across-wikipedia-ugcPost-7325869359782838272-NgAw/" target="_blank" rel="noopener" data-theme="warm" data-word="#ffd45e" data-emoji="🏁">WikiRace Eval</a>.</p>
 
-			function onWindowResize() {
+    <p>Before that I spent five years writing software to make affordable housing work better at
+        <a class="m" href="https://kismetcms.com/" target="_blank" rel="noopener"
+        data-theme="home" data-word="#7dffc0" data-emoji="✨">Kismet</a>.
+        On weekends I make paperwork and PDFs less painful with
+        <a class="m" href="https://bff.jasonstillerman.com" data-theme="ocean" data-mood="dive" data-word="#25e6c4" data-emoji="🫧" data-vehicle="🐟">Barracuda&nbsp;Form&nbsp;Filler</a>.</p>
 
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
+    <p>Also — I'm selling my beloved <a class="m" href="https://beervan.jasonstillerman.com"
+        data-theme="night" data-word="#c9c4ff" data-emoji="✨" data-vehicle="🚐">stealth camper van</a>.
+        I lived in it for nine months and now can't park it at my new apartment.
+        Come buy it and go have an adventure.</p>
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
+    <span class="foot"><a href="mailto:jason.t.stillerman@gmail.com">jason.t.stillerman@gmail.com</a></span>
+  </main>
 
-				render();
+<script>
+(function () {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fx = document.getElementById('fx');
+  const overlays = {
+    sky:   document.getElementById('sky'),
+    ocean: document.getElementById('ocean'),
+    night: document.getElementById('night'),
+    warm:  document.getElementById('warm'),
+    home:  document.getElementById('home'),
+  };
 
-			}
+  // build a starfield inside the night overlay once
+  const night = overlays.night;
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 3) + 's';
+    night.appendChild(s);
+  }
 
-			function render() {
+  let active = null;
 
-				renderer.render( scene, camera );
+  function burst(emoji, x, y) {
+    if (reduce) return;
+    const n = 7;
+    for (let i = 0; i < n; i++) {
+      const p = document.createElement('span');
+      p.className = 'particle';
+      p.textContent = emoji;
+      const dx = (Math.random() - 0.5) * 260;
+      const dy = -(90 + Math.random() * 220);
+      const rot = (Math.random() - 0.5) * 120;
+      const scale = 0.7 + Math.random() * 0.9;
+      const dur = 1100 + Math.random() * 900;
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      p.style.opacity = '0';
+      fx.appendChild(p);
+      p.animate([
+        { transform: 'translate(-50%,-50%) translate(0,0) rotate(0deg) scale(' + scale + ')', opacity: 1 },
+        { transform: 'translate(-50%,-50%) translate(' + dx + 'px,' + dy + 'px) rotate(' + rot + 'deg) scale(' + (scale*0.6) + ')', opacity: 0 }
+      ], { duration: dur, easing: 'cubic-bezier(.22,1,.36,1)' }).onfinish = () => p.remove();
+    }
+  }
 
-			}
+  function sendVehicle(glyph) {
+    if (reduce) return;
+    const v = document.createElement('div');
+    v.className = 'vehicle';
+    v.textContent = glyph;
+    const y = 20 + Math.random() * 55; // vh
+    v.style.top = y + 'vh';
+    v.style.left = '0';
+    fx.appendChild(v);
+    const flip = (glyph === '🐟') ? ' scaleX(-1)' : '';
+    v.animate([
+      { transform: 'translateX(-15vw)' + flip, opacity: 0 },
+      { transform: 'translateX(10vw)'  + flip, opacity: 1, offset: 0.12 },
+      { transform: 'translateX(88vw)'  + flip, opacity: 1, offset: 0.88 },
+      { transform: 'translateX(115vw)' + flip, opacity: 0 }
+    ], { duration: 4200, easing: 'cubic-bezier(.4,0,.6,1)' }).onfinish = () => v.remove();
+  }
 
-		</script>
+  document.querySelectorAll('a.m').forEach(el => {
+    el.addEventListener('mouseenter', e => {
+      const theme = el.dataset.theme;
+      const mood  = el.dataset.mood;
+      const word  = el.dataset.word;
 
-	</body>
+      if (active && overlays[active]) overlays[active].classList.remove('on');
+      if (theme && overlays[theme]) { overlays[theme].classList.add('on'); active = theme; }
+      document.body.classList.add('themed');
+      if (mood) document.body.classList.add(mood);
+      if (word) el.style.setProperty('--word', word);
+
+      const r = el.getBoundingClientRect();
+      burst(el.dataset.emoji || '✨', r.left + r.width / 2, r.top + r.height / 2);
+      if (el.dataset.vehicle) sendVehicle(el.dataset.vehicle);
+    });
+
+    el.addEventListener('mouseleave', () => {
+      if (active && overlays[active]) overlays[active].classList.remove('on');
+      active = null;
+      document.body.classList.remove('themed', 'lift', 'hug', 'dive');
+    });
+  });
+})();
+</script>
+</body>
 </html>
