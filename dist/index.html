@@ -47,11 +47,11 @@
   }
   .overlay.on { opacity: 1; }
 
-  #sky   { background: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)), radial-gradient(120% 90% at 80% -10%, #ffb877 0%, #ff7e6b 22%, #7b6fd6 55%, #1a1740 100%); }
-  #ocean { background: radial-gradient(130% 100% at 20% 120%, #0affc2 0%, #0a94d6 30%, #063a6b 65%, #021024 100%); }
-  #night { background: radial-gradient(120% 120% at 50% 120%, #2b2f6b 0%, #14163a 45%, #05060f 100%); }
-  #warm  { background: radial-gradient(120% 100% at 50% 0%, #ffd27a 0%, #f7a55c 30%, #7a4a3a 65%, #1a0f0c 100%); }
-  #home  { background: radial-gradient(120% 100% at 50% 40%, #6ee7b7 0%, #2f9e77 35%, #1a4a3c 70%, #05130e 100%); }
+  #sky   { background: linear-gradient(rgba(0,0,0,.58), rgba(0,0,0,.58)), radial-gradient(120% 90% at 80% -10%, #ffb877 0%, #ff7e6b 22%, #7b6fd6 55%, #1a1740 100%); }
+  #ocean { background: linear-gradient(rgba(0,0,0,.58), rgba(0,0,0,.58)), radial-gradient(130% 100% at 20% 120%, #0affc2 0%, #0a94d6 30%, #063a6b 65%, #021024 100%); }
+  #night { background: linear-gradient(rgba(0,0,0,.58), rgba(0,0,0,.58)), radial-gradient(120% 120% at 50% 120%, #2b2f6b 0%, #14163a 45%, #05060f 100%); }
+  #warm  { background: linear-gradient(rgba(0,0,0,.58), rgba(0,0,0,.58)), radial-gradient(120% 100% at 50% 0%, #ffd27a 0%, #f7a55c 30%, #7a4a3a 65%, #1a0f0c 100%); }
+  #home  { background: linear-gradient(rgba(0,0,0,.58), rgba(0,0,0,.58)), radial-gradient(120% 100% at 50% 40%, #6ee7b7 0%, #2f9e77 35%, #1a4a3c 70%, #05130e 100%); }
 
   /* starfield for the van */
   #night .star {
@@ -70,8 +70,7 @@
     max-width: 34rem;
     font-size: clamp(1.15rem, 1rem + 1.1vw, 1.6rem);
     line-height: 1.72;
-    transition: transform 0.9s cubic-bezier(.22,1,.36,1), filter 0.9s ease;
-    will-change: transform;
+    transition: filter 0.9s ease;
   }
 
   .hi {
@@ -139,16 +138,10 @@
     will-change: transform;
   }
 
-  /* body mood tweaks */
-  body.lift main { transform: translateY(-10px) scale(1.006); }
-  body.hug  main { animation: hug .7s cubic-bezier(.34,1.56,.64,1); }
-  @keyframes hug { 0%{transform:scale(1)} 35%{transform:scale(.965)} 70%{transform:scale(1.015)} 100%{transform:scale(1)} }
-  body.dive main { transform: translateY(6px); filter: saturate(1.15); }
-  body.themed .foot { color: rgba(255,255,255,.55); }
-  body.themed .hi   { color: #fff; }
-  body[data-theme="sky"] main { color: #fff; }
-  body[data-theme="sky"] .foot { color: #fff; }
-  body[data-theme="sky"] a.m:hover { color: #fff; }
+  /* Keep page copy and footer readable across every themed background. */
+  body.themed main { color: #fff; }
+  body.themed .foot { color: #fff; }
+  body.themed .hi { color: #fff; }
 
   @media (prefers-reduced-motion: reduce) {
     *, main { transition: none !important; animation: none !important; }
@@ -173,7 +166,7 @@
         — we build eVTOL airplanes. I tinker with agents all day and try to make flying electric taxis real, faster.</p>
 
     <p>Previously I did pretraining research at <a class="m" href="https://huggingface.co" target="_blank" rel="noopener"
-        data-theme="warm" data-mood="hug" data-word="#ffd45e" data-emoji="🤗">Hugging&nbsp;Face</a>,
+        data-theme="warm" data-word="#ffd45e" data-emoji="🤗">Hugging&nbsp;Face</a>,
         where I helped train
         <a class="m" href="https://arxiv.org/abs/2305.06161r" target="_blank" rel="noopener" data-theme="warm" data-word="#ffd45e" data-emoji="⭐">StarCoder</a>
         and <a class="m" href="https://huggingface.co/blog/smollm3" target="_blank" rel="noopener" data-theme="warm" data-word="#ffd45e" data-emoji="🤏">SmolLM</a>,
@@ -260,14 +253,11 @@
   document.querySelectorAll('a.m').forEach(el => {
     el.addEventListener('mouseenter', e => {
       const theme = el.dataset.theme;
-      const mood  = el.dataset.mood;
       const word  = el.dataset.word;
 
       if (active && overlays[active]) overlays[active].classList.remove('on');
       if (theme && overlays[theme]) { overlays[theme].classList.add('on'); active = theme; }
       document.body.classList.add('themed');
-      document.body.dataset.theme = theme || '';
-      if (mood) document.body.classList.add(mood);
       if (word) el.style.setProperty('--word', word);
 
       const r = el.getBoundingClientRect();
@@ -278,8 +268,7 @@
     el.addEventListener('mouseleave', () => {
       if (active && overlays[active]) overlays[active].classList.remove('on');
       active = null;
-      document.body.classList.remove('themed', 'lift', 'hug', 'dive');
-      document.body.removeAttribute('data-theme');
+      document.body.classList.remove('themed');
     });
   });
 })();
